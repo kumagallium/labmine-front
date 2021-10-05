@@ -1,0 +1,117 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 200,
+  "height": 200,
+  "padding": 5,
+  "signals": [
+    {
+      "name": "interpolate",
+      "value": "linear"
+    }
+  ],
+  "title": {
+    "text": "",
+    "orient":"bottom",
+    "dy":5,
+    "fontSize":12
+  },
+  "data": [
+    {
+      "name": "source",
+      "values": [{"x":0,"y":0,"color":0},{"x":1,"y":1,"color":0}],
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum['x'] != null && datum['y'] != null"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "point",
+      "round": true,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "source", "field": "x"},
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "round": true,
+      "nice": true,
+      "zero": false,
+      "domain": {"data": "source", "field": "y"},
+      "range": "height"
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "range": "category",
+      "domain": {"data": "source", "field": "color"}
+    }
+  ],
+
+  "legends": [
+    {
+      "stroke": "color",
+      "symbolType": "stroke",
+      "title": "Products",
+      "padding": 4
+    }
+  ],
+
+  "axes": [
+    {
+      "scale": "x",
+      "grid": true,
+      "domain": false,
+      "orient": "bottom",
+      "tickCount": 5,
+      "title": ""
+    },
+    {
+      "scale": "y",
+      "grid": true,
+      "domain": false,
+      "orient": "left",
+      "titlePadding": 5,
+      "title": ""
+    }
+  ],
+  "marks": [
+    {
+      "type": "group",
+      "from": {
+        "facet": {
+          "name": "series",
+          "data": "source",
+          "groupby": "color"
+        }
+      },
+      "marks": [
+        {
+          "type": "line",
+          "from": {"data": "series"},
+          "encode": {
+            "enter": {
+              "x": {"scale": "x", "field": "x"},
+              "y": {"scale": "y", "field": "y"},
+              "stroke": {"scale": "color", "field": "color"},
+              "strokeWidth": {"value": 2}
+            },
+            "update": {
+              "interpolate": {"signal": "interpolate"},
+              "fillOpacity": {"value": 1}
+            },
+            "hover": {
+              "fillOpacity": {"value": 0.5}
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "labmine",
+  "version": "1.0.0",
+  "description": "",
+  "author": "m-kumagai",
+  "private": true,
+  "scripts": {
+    "dev": "HOST=0.0.0.0 PORT=3000 nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@mdi/js": "^4.5.95",
+    "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/vuetify": "^1.11.3",
+    "compressorjs": "^1.0.7",
+    "draw2d": "1.0.19",
+    "jquery": "3.4.1",
+    "jquery-ui": "1.12.1",
+    "jquery.browser": "0.1.0",
+    "moment": "^2.22.2",
+    "nuxt": "^2.0.0",
+    "tabulator-tables": "4.7.1",
+    "universal-cookie": "4.0.2",
+    "vega": "5.9.0",
+    "vue-cropperjs": "^4.2.0",
+    "nuxt-env": "^0.1.0",
+    "vuedraggable": "2.23.2"
+  },
+  "devDependencies": {
+    "hard-source-webpack-plugin": "0.13.1"
+  }
+}
