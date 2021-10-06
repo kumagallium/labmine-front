@@ -50,7 +50,6 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/apiurl.js'}
   /*  { src: '~/node_modules/jquery',
       mode: "client" },
     { src: '~/node_modules/draw2d',
@@ -85,6 +84,12 @@ export default {
   ** https://github.com/nuxt-community/vuetify-module
   */
   axios: {
+    proxy: true,
+  },
+  proxy: {
+    '/api/': {
+      target: process.env.BASE_URL
+    }
   },
   /*auth: {
     strategies: {
