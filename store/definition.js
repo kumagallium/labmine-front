@@ -37,7 +37,7 @@ export const actions = {
   async publishDefinition({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const definitions = await this.$axios.$post("/v1/quantities/",{property_name:payload.property_name,symbol:payload.symbol,base:payload.base})
+    const definitions = await this.$axios.$post("/api/v1/quantities/",{property_name:payload.property_name,symbol:payload.symbol,base:payload.base})
                           .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
@@ -45,7 +45,7 @@ export const actions = {
   },
   async fetchPhysics({ rootState, commit }) {
     if (!rootState.access) throw new Error('Invalid user')
-    var  urls = "/v1/physics/"
+    var  urls = "/api/v1/physics/"
     const physics = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -56,7 +56,7 @@ export const actions = {
   },
   async fetchDefinitions({ rootState, commit }) {
     if (!rootState.access) throw new Error('Invalid user')
-    var  urls = "/v1/quantities/"
+    var  urls = "/api/v1/quantities/"
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
     const definitions = await this.$axios.$get(urls)
                         .catch (error => {
@@ -68,7 +68,7 @@ export const actions = {
   },
   async checkUnit({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
-    var  urls = "/v1/unit_check/?unit="+payload.unit
+    var  urls = "/api/v1/unit_check/?unit="+payload.unit
     const results = await this.$axios.$get(urls)
 
     commit('addResults',{results})
@@ -76,7 +76,7 @@ export const actions = {
   async editProperty({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const property = await this.$axios.$put("/v1/properties/"+payload.property_id,{property_name:payload.property_name})
+    const property = await this.$axios.$put("/api/v1/properties/"+payload.property_id,{property_name:payload.property_name})
                       .catch (error => {
                           commit('setError', { emsg:error.response.data })
                       });
@@ -86,7 +86,7 @@ export const actions = {
   async editUnit({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const unit = await this.$axios.$put("/v1/units/"+payload.unit_id,{symbol:payload.symbol})
+    const unit = await this.$axios.$put("/api/v1/units/"+payload.unit_id,{symbol:payload.symbol})
                       .catch (error => {
                           commit('setError', { emsg:error.response.data })
                       });
@@ -95,7 +95,7 @@ export const actions = {
   async removeProperty({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const results = await this.$axios.$delete("/v1/properties/"+payload.property_id,{property_name:payload.property_name})
+    const results = await this.$axios.$delete("/api/v1/properties/"+payload.property_id,{property_name:payload.property_name})
                         .catch (error => {
                         commit('setError', { emsg:error.response.data})
                     });
@@ -103,7 +103,7 @@ export const actions = {
   async removeUnit({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const results = await this.$axios.$delete("/v1/units/"+payload.unit_id,{symbol:payload.symbol})
+    const results = await this.$axios.$delete("/api/v1/units/"+payload.unit_id,{symbol:payload.symbol})
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
                     });

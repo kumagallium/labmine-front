@@ -80,13 +80,13 @@ export const actions = {
   async publishType({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newtype = await this.$axios.$post("/v1/types/",{type_name:payload.typename,concept:payload.concept})
+    const newtype = await this.$axios.$post("/api/v1/types/",{type_name:payload.typename,concept:payload.concept})
                           .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
     if (!newtype.id) throw new Error('Bad request')
     
-    const types = await this.$axios.$get("/v1/types/"+"?concept="+payload.concept)
+    const types = await this.$axios.$get("/api/v1/types/"+"?concept="+payload.concept)
     commit('clearTypes')
     Object.entries(types || [])
       .forEach(([id, contents]) =>
@@ -103,7 +103,7 @@ export const actions = {
     var nodes_tmp = []
     for(var type_tmp of types){
         typeid = type_tmp.pk
-        node_tmp = await this.$axios.$get("/v1/types/"+typeid+"/nodes/")
+        node_tmp = await this.$axios.$get("/api/v1/types/"+typeid+"/nodes/")
                                 .catch (error => {
                                 commit('setError', { emsg:error.response.data })
                             });
@@ -135,14 +135,14 @@ export const actions = {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
 
-    const newnode = await this.$axios.$post("/v1/types/"+payload.typeid+"/nodes/",{node_name:payload.node_name})
+    const newnode = await this.$axios.$post("/api/v1/types/"+payload.typeid+"/nodes/",{node_name:payload.node_name})
                           .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
     if (!newnode.id) throw new Error('Bad request')
 
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const details = await this.$axios.$get("/v1/nodes/"+newnode.id)
+    const details = await this.$axios.$get("/api/v1/nodes/"+newnode.id)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
                     });
@@ -153,7 +153,7 @@ export const actions = {
     commit('clearDetails')
     commit('addDetails', {details})
 
-    var node_tmp =  await this.$axios.$get("/v1/types/"+payload.typeid+"/nodes/")
+    var node_tmp =  await this.$axios.$get("/api/v1/types/"+payload.typeid+"/nodes/")
                             .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
@@ -178,7 +178,7 @@ export const actions = {
     if(payload.property_z.id != undefined)property_z_id = payload.property_z.id
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newfigure = await this.$axios.$post("/v1/figures/",{figure_name:payload.figure_name,node:nodeid,property_x_id:property_x_id,property_y_id:property_y_id,property_z_id:property_z_id,datatype:payload.datatype,cluster:payload.cluster})
+    const newfigure = await this.$axios.$post("/api/v1/figures/",{figure_name:payload.figure_name,node:nodeid,property_x_id:property_x_id,property_y_id:property_y_id,property_z_id:property_z_id,datatype:payload.datatype,cluster:payload.cluster})
                           .catch (error => {
                             console.log("error.response.data")
                             console.log(error.response)
@@ -197,7 +197,7 @@ export const actions = {
     }
     console.log(nodeids)
     */
-    const newblueprint = await this.$axios.$post("/v1/blueprints/",{flowdata:payload.template})
+    const newblueprint = await this.$axios.$post("/api/v1/blueprints/",{flowdata:payload.template})
                           .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
@@ -223,14 +223,14 @@ export const actions = {
     }
     console.log(nodeids)
     */
-    const newblueprint = await this.$axios.$post("/v1/blueprints/",{flowdata:payload.template})
+    const newblueprint = await this.$axios.$post("/api/v1/blueprints/",{flowdata:payload.template})
                           .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
     if (!newblueprint.id) throw new Error('Bad request')
     var bpid = newblueprint.id
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newtemplate = await this.$axios.$post("/v1/templates/",{template_name:payload.flowname,blueprint_id:bpid})
+    const newtemplate = await this.$axios.$post("/api/v1/templates/",{template_name:payload.flowname,blueprint_id:bpid})
                           .catch (error => {
                             console.log(error.response.data)
                             commit('setError', { emsg:error.response.data })
@@ -240,7 +240,7 @@ export const actions = {
   async fetchNodes({ rootState, commit} , { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const types = await this.$axios.$get("/v1/types/"+"?concept="+payload.concept)
+    const types = await this.$axios.$get("/api/v1/types/"+"?concept="+payload.concept)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
                     });
@@ -252,7 +252,7 @@ export const actions = {
     for(var type_tmp of types){
         typeid = type_tmp.pk
         this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-        node_tmp = await this.$axios.$get("/v1/types/"+typeid+"/nodes/")
+        node_tmp = await this.$axios.$get("/api/v1/types/"+typeid+"/nodes/")
                                 .catch (error => {
                                 commit('setError', { emsg:error.response.data })
                             });
@@ -283,7 +283,7 @@ export const actions = {
   async fetchTypes({ rootState, commit }, {payload}) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const types = await this.$axios.$get("/v1/types/"+"?concept="+payload.concept)
+    const types = await this.$axios.$get("/api/v1/types/"+"?concept="+payload.concept)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
                     });
@@ -302,7 +302,7 @@ export const actions = {
   async fetchBlueprints({ rootState, commit }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const templates = await this.$axios.$get("/v1/templates/")
+    const templates = await this.$axios.$get("/api/v1/templates/")
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
                     });
@@ -313,7 +313,7 @@ export const actions = {
       var bpid = temp["fields"]["blueprint"]
       var template_name = temp["fields"]["template_name"]
       var editor =  temp["fields"]["editor"]
-      var blueprint_tmp = await this.$axios.$get("/v1/blueprints/"+String(bpid))
+      var blueprint_tmp = await this.$axios.$get("/api/v1/blueprints/"+String(bpid))
                           .catch (error => {
                           commit('setError', { emsg:error.response.data })
                       })
@@ -335,12 +335,12 @@ export const actions = {
   async fetchDetails({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const details = await this.$axios.$get("/v1/nodes/"+payload.nodeid)
+    const details = await this.$axios.$get("/api/v1/nodes/"+payload.nodeid)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
                     });
     if (!details) throw new Error('Bad request')
-    const types = await this.$axios.$get("/v1/types/"+details["typeid_id"])
+    const types = await this.$axios.$get("/api/v1/types/"+details["typeid_id"])
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
                     });
@@ -377,13 +377,13 @@ export const actions = {
   async editType({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newtype = await this.$axios.$put(`/v1/types/${payload.typeid}`,{type_name:payload.typename})
+    const newtype = await this.$axios.$put(`/api/v1/types/${payload.typeid}`,{type_name:payload.typename})
                       .catch (error => {
                           commit('setError', { emsg:error.response.data })
                       });
     if (!newtype.id) throw new Error('Bad request')
 
-    const types = await this.$axios.$get("/v1/types/"+"?concept="+payload.concept)
+    const types = await this.$axios.$get("/api/v1/types/"+"?concept="+payload.concept)
     commit('clearTypes')
     Object.entries(types || [])
       
@@ -411,7 +411,7 @@ export const actions = {
     const config = {
         headers: { 'content-type': 'multipart/form-data' }
     }
-    var  urls = "/v1/nodes/"+payload.nodeid
+    var  urls = "/api/v1/nodes/"+payload.nodeid
     const node = await this.$axios.$put(urls,form,config)
                         .catch (error => {
                           console.log(error.response.data)
@@ -419,7 +419,7 @@ export const actions = {
                     });
     if (!node.id) throw new Error('Bad request')
 
-    var node_tmp =  await this.$axios.$get("/v1/types/"+payload.typeid+"/nodes/")
+    var node_tmp =  await this.$axios.$get("/api/v1/types/"+payload.typeid+"/nodes/")
                             .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
@@ -444,7 +444,7 @@ export const actions = {
           if(fig.property_x.id!=undefined)property_x_id=fig.property_x.id
           if(fig.property_y.id!=undefined)property_y_id=fig.property_y.id
           if(fig.property_z.id!=undefined)property_z_id=fig.property_z.id
-          const figures = await this.$axios.$put("/v1/figures/"+fig.id,{figure_name:fig.figure_name,node:payload.nodeid,property_x_id:property_x_id,property_y_id:property_y_id,property_z_id:property_z_id,datatype:fig.datatype,cluster:fig.cluster})
+          const figures = await this.$axios.$put("/api/v1/figures/"+fig.id,{figure_name:fig.figure_name,node:payload.nodeid,property_x_id:property_x_id,property_y_id:property_y_id,property_z_id:property_z_id,datatype:fig.datatype,cluster:fig.cluster})
                 .catch (error => {
                   console.log(error.response.data)
                   commit('setError', { emsg:error.response.data })
@@ -457,7 +457,7 @@ export const actions = {
   async editBlueprint({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const blueprint = await this.$axios.$put("/v1/blueprints/"+payload.flowid,{flowdata:payload.template})
+    const blueprint = await this.$axios.$put("/api/v1/blueprints/"+payload.flowid,{flowdata:payload.template})
                           .catch (error => {
                             console.log(error.response.data)
                             commit('setError', { emsg:error.response.data })
@@ -469,7 +469,7 @@ export const actions = {
       if(blueprint.flowdata.filter(fd => fd.cssClass == "PlanFigure").length>0){
         var boxid = blueprint.flowdata.filter(fd => fd.cssClass == "PlanFigure")[0].id
         this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-        const plan_tmp = await this.$axios.$get("/v1/blueprints/"+bpid+"/boxes/"+boxid)
+        const plan_tmp = await this.$axios.$get("/api/v1/blueprints/"+bpid+"/boxes/"+boxid)
                           .catch (error => {
                               commit('setError', { emsg:error.response.data })
                           });
@@ -481,7 +481,7 @@ export const actions = {
   async getBlueprint({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const template = await this.$axios.$get(`/v1/blueprints/${payload.templateid}`)
+    const template = await this.$axios.$get(`/api/v1/blueprints/${payload.templateid}`)
                       .catch (error => {
                           commit('setError', { emsg:error.response.data })
                       });
@@ -492,7 +492,7 @@ export const actions = {
       if(template.flowdata.filter(fd => fd.cssClass == "PlanFigure").length>0){
         var boxid = template.flowdata.filter(fd => fd.cssClass == "PlanFigure")[0].id
         this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-        const plan_tmp = await this.$axios.$get("/v1/blueprints/"+bpid+"/boxes/"+boxid)
+        const plan_tmp = await this.$axios.$get("/api/v1/blueprints/"+bpid+"/boxes/"+boxid)
                           .catch (error => {
                               commit('setError', { emsg:error.response.data })
                           });
@@ -505,13 +505,13 @@ export const actions = {
   async removeType({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const results = await this.$axios.$delete(`/v1/types/${payload.typeid}`)
+    const results = await this.$axios.$delete(`/api/v1/types/${payload.typeid}`)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });
     if(!results.length==0) throw new Error('Bad request')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const types = await this.$axios.$get("/v1/types/"+"?concept="+payload.concept)
+    const types = await this.$axios.$get("/api/v1/types/"+"?concept="+payload.concept)
     commit('clearTypes')
     Object.entries(types || [])
       .forEach(([id, contents]) =>
@@ -529,7 +529,7 @@ export const actions = {
     for(var type_tmp of types){
         typeid = type_tmp.pk
         this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-        node_tmp = await this.$axios.$get("/v1/types/"+typeid+"/nodes/")
+        node_tmp = await this.$axios.$get("/api/v1/types/"+typeid+"/nodes/")
                                 .catch (error => {
                                 commit('setError', { emsg:error.response.data })
                             });
@@ -560,13 +560,13 @@ export const actions = {
   async removeDetail({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const results = await this.$axios.$delete(`/v1/nodes/${payload.nodeid}`)
+    const results = await this.$axios.$delete(`/api/v1/nodes/${payload.nodeid}`)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });
     if(!results.length==0) throw new Error('Bad request')
 
-    var node_tmp =  await this.$axios.$get("/v1/types/"+payload.typeid+"/nodes/")
+    var node_tmp =  await this.$axios.$get("/api/v1/types/"+payload.typeid+"/nodes/")
                             .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
@@ -586,7 +586,7 @@ export const actions = {
     if (!rootState.access) throw new Error('Invalid user')
     for(let i = 0; i < payload.nodeid.length; i++){
       this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-      const results = await this.$axios.$delete("/v1/blueprints/"+payload.flowid+"/boxes/"+payload.boxid[i])
+      const results = await this.$axios.$delete("/api/v1/blueprints/"+payload.flowid+"/boxes/"+payload.boxid[i])
                           .catch (error => {
                           commit('setError', { emsg:error.response.data.error })
                       });
@@ -595,7 +595,7 @@ export const actions = {
   async removeFigure({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const figure = await this.$axios.$delete("/v1/figures/"+payload.figureid)
+    const figure = await this.$axios.$delete("/api/v1/figures/"+payload.figureid)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });

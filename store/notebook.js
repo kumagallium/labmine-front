@@ -129,7 +129,7 @@ export const actions = {
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
     commit('clearNotebook')
     for(var expid of payload["experimentid"]){
-      var  urls = "/v1/experiments/"+String(expid)
+      var  urls = "/api/v1/experiments/"+String(expid)
       const experiment = await this.$axios.$get(urls)
                           .catch (error => {
                           commit('setError', { emsg:error.response.data })
@@ -141,7 +141,7 @@ export const actions = {
   async fetchData({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/data/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/data/"
     const datalist = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -153,7 +153,7 @@ export const actions = {
   async fetchEntity({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const entity = await this.$axios.$get("/v1/blueprints/"+payload.flowid+"/boxes/"+payload.boxid)
+    const entity = await this.$axios.$get("/api/v1/blueprints/"+payload.flowid+"/boxes/"+payload.boxid)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });
@@ -162,12 +162,12 @@ export const actions = {
   async fetchTags({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const tags = await this.$axios.$get("/v1/tags/")
+    const tags = await this.$axios.$get("/api/v1/tags/")
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const selectedtags = await this.$axios.$get("/v1/experiments/"+payload.experimentid[0]+"/pins/")
+    const selectedtags = await this.$axios.$get("/api/v1/experiments/"+payload.experimentid[0]+"/pins/")
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });
@@ -176,7 +176,7 @@ export const actions = {
   async fetchItems({ rootState, commit }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const items = await this.$axios.$get("/v1/items/")
+    const items = await this.$axios.$get("/api/v1/items/")
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });
@@ -185,7 +185,7 @@ export const actions = {
   async fetchHeadlines({ rootState, commit }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const headlines = await this.$axios.$get("/v1/headlines/")
+    const headlines = await this.$axios.$get("/api/v1/headlines/")
                         .catch (error => {
                         commit('setError', { emsg:error.response.data.error })
                     });
@@ -194,7 +194,7 @@ export const actions = {
   async fetchPlanData({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/descriptions/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/descriptions/"
     const plan_descriptions = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -204,7 +204,7 @@ export const actions = {
 
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/sentences/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/sentences/"
     const plan_sentences = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -214,7 +214,7 @@ export const actions = {
 
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/images/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/images/"
     const plan_images = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -227,7 +227,7 @@ export const actions = {
   async fetchDescriptions({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/descriptions/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/descriptions/"
     const descriptions = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -238,7 +238,7 @@ export const actions = {
   async fetchSentences({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/sentences/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/sentences/"
     const sentences = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -249,7 +249,7 @@ export const actions = {
   async fetchDefaults({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/nodes/"+String(payload.nodeid)+"/defaults/"
+    var  urls = "/api/v1/nodes/"+String(payload.nodeid)+"/defaults/"
     const defaults = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -260,7 +260,7 @@ export const actions = {
   async fetchImages({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/images/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/images/"
     const images = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -271,7 +271,7 @@ export const actions = {
   async fetchProducts({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/experiments/"+String(payload.experimentid[0])+"/products/"
+    var  urls = "/api/v1/experiments/"+String(payload.experimentid[0])+"/products/"
     const products = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -282,7 +282,7 @@ export const actions = {
   async fetchSelectedProduct({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+ String(payload.entityid) + "/products/"
+    var  urls = "/api/v1/entities/"+ String(payload.entityid) + "/products/"
     const selectedproduct = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -293,7 +293,7 @@ export const actions = {
   async getData({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/experiments/"+String(payload.experimentid)+"/getdata/"
+    var  urls = "/api/v1/experiments/"+String(payload.experimentid)+"/getdata/"
     const data = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.data })
@@ -304,7 +304,7 @@ export const actions = {
   async getSummarizedData({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/experiments/"+String(payload.experimentid)+"/getsummarizeddata/"
+    var  urls = "/api/v1/experiments/"+String(payload.experimentid)+"/getsummarizeddata/"
     const summarizeddata = await this.$axios.$get(urls)
                         .catch (error => {
                         commit('setError', { emsg:error.response.summarizeddata })
@@ -323,7 +323,7 @@ export const actions = {
     const config = {
         headers: { 'content-type': 'multipart/form-data' }
     }
-    var  urls = "/v1/images/"
+    var  urls = "/api/v1/images/"
     const images = await this.$axios.$post(urls,form,config)
                         .catch (error => {
                           console.log(error.response.data)
@@ -333,7 +333,7 @@ export const actions = {
   async publishPlan({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/blueprints/"+String(payload.blueprintid)+"/boxes/"+String(payload.boxid)
+    var  urls = "/api/v1/blueprints/"+String(payload.blueprintid)+"/boxes/"+String(payload.boxid)
     const plan = await this.$axios.$post(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -343,7 +343,7 @@ export const actions = {
   async publishData({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+String(payload.entityid)+"/data/"
+    var  urls = "/api/v1/entities/"+String(payload.entityid)+"/data/"
     const datalist = await this.$axios.$post(urls,{"data":payload.data,"figure":payload.figureid,"unit_x":payload.unit_x,"unit_y":payload.unit_y,"unit_z":payload.unit_z})
                         .catch (error => {
                           console.log(error.response.data)
@@ -353,7 +353,7 @@ export const actions = {
   async publishTags({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/tags/"
+    var  urls = "/api/v1/tags/"
     var newtag = await this.$axios.$post(urls,{"tag_name":payload.tag_name})
                         .catch (error => {
                           console.log(error.response.data)
@@ -363,7 +363,7 @@ export const actions = {
 
     var tagid = newtag.id
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/experiments/"+payload.experimentid[0] + "/tags/"+tagid+"/pins/"
+    var  urls = "/api/v1/experiments/"+payload.experimentid[0] + "/tags/"+tagid+"/pins/"
     const newpin = await this.$axios.$post(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -373,7 +373,7 @@ export const actions = {
   async publishProducts({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/experiments/"+payload.experimentid[0] + "/products/"
+    var  urls = "/api/v1/experiments/"+payload.experimentid[0] + "/products/"
     const newproduct = await this.$axios.$post(urls,{"product_name":payload.product_name})
                         .catch (error => {
                           console.log(error.response.data)
@@ -386,7 +386,7 @@ export const actions = {
     var productid = payload.productid
     var entityid = payload.entityid
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+ entityid + "/products/"+productid
+    var  urls = "/api/v1/entities/"+ entityid + "/products/"+productid
     const newdefinitions = await this.$axios.$post(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -398,7 +398,7 @@ export const actions = {
     var itemid = payload.itemid
     var entityid = payload.entityid
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+ entityid + "/items/"+itemid+"/descriptions/"
+    var  urls = "/api/v1/entities/"+ entityid + "/items/"+itemid+"/descriptions/"
     const newdescriptions = await this.$axios.$post(urls,{"values":payload.values,"cluster":payload.cluster})
                         .catch (error => {
                           console.log(error.response.data)
@@ -410,7 +410,7 @@ export const actions = {
     var headlineid = payload.headlineid
     var entityid = payload.entityid
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+ entityid + "/headlines/"+headlineid+"/sentences/"
+    var  urls = "/api/v1/entities/"+ entityid + "/headlines/"+headlineid+"/sentences/"
     const newsentences = await this.$axios.$post(urls,{"value":payload.value,"cluster":payload.cluster})
                         .catch (error => {
                           console.log(error.response.data)
@@ -420,7 +420,7 @@ export const actions = {
   async publishItems({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/items/"
+    var  urls = "/api/v1/items/"
     var newitem = await this.$axios.$post(urls,{"item_name":payload.item_name})
                         .catch (error => {
                           console.log(error.response.data)
@@ -432,7 +432,7 @@ export const actions = {
       var itemid = newitem.id
       var nodeid = payload.nodeid
       this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-      var  urls = "/v1/nodes/"+ nodeid + "/items/"+itemid+"/defaults/"
+      var  urls = "/api/v1/nodes/"+ nodeid + "/items/"+itemid+"/defaults/"
       const newdefaults = await this.$axios.$post(urls,{"cluster":payload.cluster})
                           .catch (error => {
                             console.log(error.response.data)
@@ -443,7 +443,7 @@ export const actions = {
       var itemid = newitem.id
       var entityid = payload.entityid
       this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-      var  urls = "/v1/entities/"+ entityid + "/items/"+itemid+"/descriptions/"
+      var  urls = "/api/v1/entities/"+ entityid + "/items/"+itemid+"/descriptions/"
       const newdescriptions = await this.$axios.$post(urls,{"values":[],"cluster":payload.cluster})
                           .catch (error => {
                             console.log(error.response.data)
@@ -454,7 +454,7 @@ export const actions = {
   async publishHeadlines({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/headlines/"
+    var  urls = "/api/v1/headlines/"
     var newheadline = await this.$axios.$post(urls,{"headline_name":payload.headline_name})
                         .catch (error => {
                           console.log(error.response.data)
@@ -465,7 +465,7 @@ export const actions = {
     var headlineid = newheadline.id
     var entityid = payload.entityid
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+ entityid + "/headlines/"+headlineid+"/sentences/"
+    var  urls = "/api/v1/entities/"+ entityid + "/headlines/"+headlineid+"/sentences/"
     const newsentences = await this.$axios.$post(urls,{"value":"","cluster":payload.cluster})
                         .catch (error => {
                           console.log(error.response.data)
@@ -476,7 +476,7 @@ export const actions = {
   async editExperiment({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const experiment = await this.$axios.$put("/v1/experiments/"+payload.experimentid,{"title":payload.recipename,'blueprint':0})
+    const experiment = await this.$axios.$put("/api/v1/experiments/"+payload.experimentid,{"title":payload.recipename,'blueprint':0})
                           .catch (error => {
                             console.log(error.response.data)
                             commit('setError', { emsg:error.response.data })
@@ -487,7 +487,7 @@ export const actions = {
     var entityid = payload.entityid
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/entities/"+ entityid + "/products/"+productid
+    var  urls = "/api/v1/entities/"+ entityid + "/products/"+productid
     const product = await this.$axios.$put(urls,{"product_name":payload.product_name})
                         .catch (error => {
                           console.log(error.response.data)
@@ -498,7 +498,7 @@ export const actions = {
     var tagid = rootState.notebook.rawtags.filter(rt => rt.fields.tag_name == payload.tag_name)[0].pk
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/experiments/"+payload.experimentid[0] + "/tags/"+tagid+"/pins/"
+    var urls = "/api/v1/experiments/"+payload.experimentid[0] + "/tags/"+tagid+"/pins/"
     var pin = await this.$axios.$delete(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -506,7 +506,7 @@ export const actions = {
                     });
                     
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/tags/"+tagid
+    var urls = "/api/v1/tags/"+tagid
     var tag = await this.$axios.$delete(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -517,7 +517,7 @@ export const actions = {
   async removeImages({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/images/"+payload.imageid
+    var urls = "/api/v1/images/"+payload.imageid
     var image = await this.$axios.$delete(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -527,7 +527,7 @@ export const actions = {
   async removeDefaults({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/nodes/"+payload.nodeid + "/items/"+payload.itemid+"/defaults/"
+    var urls = "/api/v1/nodes/"+payload.nodeid + "/items/"+payload.itemid+"/defaults/"
     var defaults = await this.$axios.$delete(urls,{data:{"cluster":payload.cluster}})
                         .catch (error => {
                           console.log(error.response.data)
@@ -535,7 +535,7 @@ export const actions = {
                     });
                     
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/items/"+payload.itemid
+    var urls = "/api/v1/items/"+payload.itemid
     var item = await this.$axios.$delete(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -545,7 +545,7 @@ export const actions = {
   async removeDescriptions({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/entities/"+payload.entityid + "/items/"+payload.itemid+"/descriptions/"
+    var urls = "/api/v1/entities/"+payload.entityid + "/items/"+payload.itemid+"/descriptions/"
     var descriptions = await this.$axios.$delete(urls,{data:{"cluster":payload.cluster}})
                         .catch (error => {
                           console.log(error.response.data)
@@ -553,7 +553,7 @@ export const actions = {
                     });
                     
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/items/"+payload.itemid
+    var urls = "/api/v1/items/"+payload.itemid
     var item = await this.$axios.$delete(urls)
                         .catch (error => {
                           console.log(error.response.data)
@@ -564,7 +564,7 @@ export const actions = {
   async removeSentences({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/entities/"+payload.entityid + "/headlines/"+payload.headlineid+"/sentences/"
+    var urls = "/api/v1/entities/"+payload.entityid + "/headlines/"+payload.headlineid+"/sentences/"
     var sentences = await this.$axios.$delete(urls,{data:{"cluster":payload.cluster}})
                         .catch (error => {
                           console.log(error.response.data)
@@ -572,7 +572,7 @@ export const actions = {
                     });
                     
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var urls = "/v1/headlines/"+payload.headlineid
+    var urls = "/api/v1/headlines/"+payload.headlineid
     var headline = await this.$axios.$delete(urls)
                         .catch (error => {
                           console.log(error.response.data)

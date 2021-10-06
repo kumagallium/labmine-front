@@ -140,7 +140,7 @@ export default {
   components: { Navi },
   async asyncData({ $axios,store,route,redirect }){
       $axios.setHeader('Authorization', "Bearer "+store.getters["access"])
-      var project = await $axios.$get(`/v1/projects/${route.params.projectid}`)
+      var project = await $axios.$get(`/api/v1/projects/${route.params.projectid}`)
                             .catch (error => {
                               const cookies = new Cookies()
                               cookies.remove('user', { path: '/' })

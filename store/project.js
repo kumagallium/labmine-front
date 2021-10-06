@@ -28,12 +28,12 @@ export const actions = {
   async publishProject({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newProject = await this.$axios.$post("/v1/projects/",{project_name:payload.projectname})
+    const newProject = await this.$axios.$post("/api/v1/projects/",{project_name:payload.projectname})
                           .catch (error => {
                             commit('setError', { emsg:error.response.data })
                         });
     if (!newProject.id) throw new Error('Bad request')
-    const projects = await this.$axios.$get("/v1/projects/")
+    const projects = await this.$axios.$get("/api/v1/projects/")
     commit('clearProjects')
     Object.entries(projects || [])
       .reverse()
@@ -49,13 +49,13 @@ export const actions = {
   async fetchProject({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const project = await this.$axios.$get(`/v1/projects/${payload.projectid}`)
+    const project = await this.$axios.$get(`/api/v1/projects/${payload.projectid}`)
     commit('addProject', { project: { id,contents } })
   },
   async fetchProjects({ rootState, commit }) {
       if (!rootState.access) throw new Error('Invalid user')
       this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-      const projects = await this.$axios.$get("/v1/projects/")
+      const projects = await this.$axios.$get("/api/v1/projects/")
                           .catch (error => {
                             console.log(error)
                             commit('setError', { emsg:error.response.data })
@@ -76,12 +76,12 @@ export const actions = {
   async editProject({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newProject = await this.$axios.$put(`/v1/projects/${payload.projectid}`,{project_name:payload.projectname})
+    const newProject = await this.$axios.$put(`/api/v1/projects/${payload.projectid}`,{project_name:payload.projectname})
                       .catch (error => {
                           commit('setError', { emsg:error.response.data })
                       });
     if (!newProject.id) throw new Error('Bad request')
-    const projects = await this.$axios.$get("/v1/projects/")
+    const projects = await this.$axios.$get("/api/v1/projects/")
     commit('clearProjects')
     Object.entries(projects || [])
       .reverse()
@@ -97,8 +97,8 @@ export const actions = {
   async removeProject({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newPost = await this.$axios.$delete(`/v1/projects/${payload.projectid}`)
-    const projects = await this.$axios.$get("/v1/projects/")
+    const newPost = await this.$axios.$delete(`/api/v1/projects/${payload.projectid}`)
+    const projects = await this.$axios.$get("/api/v1/projects/")
     commit('clearProjects')
     Object.entries(projects || [])
       .reverse()

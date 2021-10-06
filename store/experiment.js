@@ -50,7 +50,7 @@ export const actions = {
   async fetchExperiments({ rootState, commit }, { payload }) {
     if (!rootState.access) throw new Error('Invalid user')
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    var  urls = "/v1/projects/"+payload.projectid+"/experiments/?page="+payload.page
+    var  urls = "/api/v1/projects/"+payload.projectid+"/experiments/?page="+payload.page
     if (payload.itemsperpage != undefined)urls += "&itemsperpage="+payload.itemsperpage
     if (payload.keywords !="")urls += "&keywords="+payload.keywords
     if (payload.tags !="")urls += "&tags="+payload.tags
