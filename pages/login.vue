@@ -69,7 +69,7 @@ export default {
         email: '',
         password:''
       },
-      visible: true,
+      visible: false,
       error: ""
     }
   },
