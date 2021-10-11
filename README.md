@@ -1,22 +1,27 @@
-# Labmine
+# Labmine-Front
+Labmine is an electronic lab notebook focusing on process.
+It can be used for research, manufacture, cooking, hobbies, etc.
 
-> My top-notch Nuxt.js project
+<img width="1180" alt="vpd-image" src="doc/images/Curry_Process.png">
 
-## Build Setup
+※This repository is only the source code of Labmine's frontend.
+Please use it together with <a href="https://github.com/kumagallium/labmine-api">Labmine api</a> repository.
+## Demo 
+https://demo-labmine.c1.hacobuneapp.com/
 
-``` bash
-# install dependencies
-$ npm run install
+## How to use
+### ●Build & run on local computer
+If you want to run it on a local computer, use the <a href="https://github.com/kumagallium/labmine-dev">labmine-dev</a> repository and start it with docker-copomse.
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+### ●Build & run on Cloud
+Under construction
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+## Contributing
+1. Fork it (`git clone https://github.com/kumagallium/labmine-front.git`)
+2. Create your feature branch (`git checkout -b your-new-feature`)
+3. Commit your changes (`git commit -am 'feat: add some feature'`)
+4. Push to the branch (`git push origin your-new-feature`)
+5. Create a new Pull Request
 
-# generate static project
-$ npm run generate
-```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+## License
+Labmine is developed and maintained by Masaya Kumagai, under [BSD 2-Clause "Simplified" License](LICENSE.txt).
