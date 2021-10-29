@@ -205,7 +205,7 @@ export const actions = {
     var bpid = newblueprint.id
 
     this.$axios.setHeader('Authorization', "Bearer "+rootState.access)
-    const newtexperiment = await this.$axios.$post("/v1/projects/"+payload.projectid+"/experiments/",{title:payload.recipename,blueprint:bpid})
+    const newtexperiment = await this.$axios.$post("/api/v1/projects/"+payload.projectid+"/experiments/",{title:payload.recipename,blueprint:bpid})
                           .catch (error => {
                             console.log(error.response.data)
                             commit('setError', { emsg:error.response.data })
