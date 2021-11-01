@@ -1315,15 +1315,20 @@ export default {
           try{
             await this.$store.dispatch('notebook/fetchEntity',{payload})
 
-            var payload = {
-              entityid: this.entity[0].pk
+            if (this.entity[0] != undefined){
+              this.dataedit = true
+              var payload = {
+                entityid: this.entity[0].pk
+              }
+              await this.$store.dispatch('notebook/fetchData',{payload})
+              await this.$store.dispatch('notebook/fetchImages',{payload})
+              await this.$store.dispatch('notebook/fetchSelectedProduct',{payload})
+              await this.$store.dispatch('notebook/fetchDescriptions',{payload})
+              await this.$store.dispatch('notebook/fetchSentences',{payload})
             }
-            await this.$store.dispatch('notebook/fetchData',{payload})
-            await this.$store.dispatch('notebook/fetchImages',{payload})
-            await this.$store.dispatch('notebook/fetchSelectedProduct',{payload})
-            await this.$store.dispatch('notebook/fetchDescriptions',{payload})
-            await this.$store.dispatch('notebook/fetchSentences',{payload})
-            
+            else{
+              this.dataedit = false
+            }
             
           } catch (e) {
             this.error = this.emsg
