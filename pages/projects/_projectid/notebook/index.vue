@@ -1037,7 +1037,7 @@ export default {
       }
     },
     async changeRecipeName(val){
-      if(this.notebooks.filter(note => note.fields.title == val)[0] == undefined){
+      if(this.notebooks[Number(this.selectedrecipe.split("-")[1])] == undefined){
         if(typeof this.jsonDocument === "object") this.jsonDocument=JSON.stringify(this.jsonDocument,null,2)
         var payload = {
           projectid:this.project.id,
@@ -1068,13 +1068,16 @@ export default {
       else{
         var payload = {
           experimentid:this.notebooks[Number(this.selectedrecipe.split("-")[1])].pk,
-          recipename:val,
+          recipename:val
         }
         try{
           await this.editExperiment({payload})
         } catch (e) {
           this.targeterror = this.emsg
         }
+        this.recipes[Number(this.selectedrecipe.split("-")[1])] = val
+        this.recipes.push("")
+        this.recipes.pop()
       }
     },
     async saveas(){
