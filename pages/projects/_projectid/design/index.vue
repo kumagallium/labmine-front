@@ -395,6 +395,7 @@ export default {
           opacity:0.4,
           zIndex: 5,
           typename:"",
+          typeid:"",
           flowname:"",
           flowid:"",
           editflag:0,
@@ -642,8 +643,8 @@ export default {
     },
     newDetails:function(){
       this.$store.commit('design/clearDetails')
-      this.$store.commit('design/updateDetail',{input:{"typeid":this.types[this.active_tab].contents.pk}})
-      this.$store.commit('design/updateDetail',{input:{"type_name":this.types[this.active_tab].contents.fields.type_name}})
+      this.$store.commit('design/updateDetail',{input:{"typeid":this.typeid}})
+      this.$store.commit('design/updateDetail',{input:{"type_name":this.typename}})
       this.$store.commit('design/updateDetail',{input:{"figures":[{"figure_name": "","property_x": {"property_name":undefined},"property_y":  {"property_name":undefined},"property_z":  {"property_name":undefined},"datatype":0,"cluster":0},
                                                         {"figure_name": "","property_x": {"property_name":undefined},"property_y":  {"property_name":undefined},"property_z":  {"property_name":undefined},"datatype":0,"cluster":1}]}})
     },
@@ -775,8 +776,8 @@ export default {
       } catch (e) {
         this.error = this.emsg
       }
-      this.typename = this.types[this.active_tab].contents.fields.type_name
-      this.typeid = this.types[this.active_tab].contents.pk
+      this.typename = this.types[this.active_tab] != undefined ? this.types[this.active_tab].contents.fields.type_name : ""
+      this.typeid =  this.types[this.active_tab] != undefined ? this.types[this.active_tab].contents.pk : ""
       this.newDetails()
       this.error=""
     },
