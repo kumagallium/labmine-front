@@ -1700,20 +1700,22 @@ export default {
             if(Object.keys(event.figure.userData).length > 0){
               self.select_nodeid.push(event.figure.userData["nodeid"]);
               self.select_boxid.push(event.figure.id);
-              //self.active_tab = Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].id)
-              //self.changeDetails(Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].contents.typeid),self.select_nodeid[0])
-              self.switch_prop = 0
-              self.dataedit = true
+              if(canvas.selection.all.data.length==1){
+                //self.active_tab = Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].id)
+                //self.changeDetails(Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].contents.typeid),self.select_nodeid[0])
+                self.switch_prop = 0
+                self.dataedit = true
 
-              self.typeid =  event["figure"].userData["typeid"]
-              //self.changeDetails(Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].contents.typeid),self.select_nodeid[0])
-              await self.changeDetails(self.typeid,self.select_nodeid[0])
-              self.switch_prop = 0
-              if(self.concept_switch != event["figure"].userData["concept_switch"]){
-                self.concept_switch =  event["figure"].userData["concept_switch"]
-                await self.changeConcept()
+                self.typeid =  event["figure"].userData["typeid"]
+                //self.changeDetails(Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].contents.typeid),self.select_nodeid[0])
+                await self.changeDetails(self.typeid,self.select_nodeid[0])
+                self.switch_prop = 0
+                if(self.concept_switch != event["figure"].userData["concept_switch"]){
+                  self.concept_switch =  event["figure"].userData["concept_switch"]
+                  await self.changeConcept()
+                }
+                self.active_tab =  event["figure"].userData["active_tab"]//Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].id)
               }
-              self.active_tab =  event["figure"].userData["active_tab"]//Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].id)
             }
           }
         }
