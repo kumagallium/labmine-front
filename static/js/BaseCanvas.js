@@ -12,7 +12,7 @@ var BaseCanvas = draw2d.Canvas.extend({
             radius: 5,
             alpha:0.5,
             color: "#aaa",
-            router: new draw2d.layout.connection.ManhattanConnectionRouter(),
+            router: new draw2d.layout.connection.InteractiveManhattanConnectionRouter(),
             targetDecorator: new draw2d.decoration.connection.ArrowDecorator()
           })
         }
