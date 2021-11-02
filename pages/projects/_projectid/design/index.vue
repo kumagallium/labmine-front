@@ -177,7 +177,6 @@
                                   <v-card
                                     :ripple="false"
                                     flat
-                                    :rounded="concept_switch == 2 ? '':'pill'"
                                     outlined
                                     v-for="(proc, index)  of nodes[typeidx].contents.node_name"
                                     :key="proc"
@@ -185,7 +184,7 @@
                                     v-on:drag="doDrag"
                                     v-on:dragend="stopDrag"
                                     v-on:click="changeDetails(nodes[typeidx].contents.typeid,nodes[typeidx].contents.pk[index])"
-                                    :style="'background-color:'+nodes[typeidx].contents.color+';'"
+                                    style="background-color:#eee;"
                                     class="text-center ma-1 float-left node"
                                   >
                                     {{proc}}
@@ -602,12 +601,26 @@ export default {
       if("svg" == document.elementFromPoint(event.clientX, event.clientY).tagName){
         var currentZoom = canvas.getZoom();
         var nodeid = this.nodes[this.active_tab].contents.pk[this.nodes[this.active_tab].contents.node_name.indexOf(this.dragname)]
-        if(this.dragname.length > 10) this.dragname = this.dragname.substr(0,10)+"...";
+        if(this.dragname.length > 5) this.dragname = this.dragname.substr(0,5)+"...";
         var label = new draw2d.shape.basic.Label({text:this.dragname,stroke:0, fontColor:"#0d0d0d"});
-        if(this.concept_switch==0) var fig = new MaterialFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        else if(this.concept_switch==1) var fig = new ToolFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        else var fig = new CustomFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        fig.add(label, new draw2d.layout.locator.CenterLocator());
+        if(this.concept_switch==0){
+          var tagtext = "M"
+          var tagcolor = "#3949AB"
+          var fig = new MaterialFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        else if(this.concept_switch==1){
+          var tagtext = "T"
+          var tagcolor = "#00897B"
+          var fig = new ToolFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        else {
+          var tagtext = "A"
+          var tagcolor = "#E53935"
+          var fig = new CustomFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        var tag = new draw2d.shape.basic.Label({text:tagtext, stroke:0, bgColor :tagcolor, height:25, width:20, fontColor:"#fff", radius:2});
+        fig.add(label, new draw2d.layout.locator.RightLocator({margin:-80}));
+        fig.add(tag, new draw2d.layout.locator.RightLocator({margin:-100}));
         fig.attr('userData', {"nodeid":nodeid,"typeid":this.typeid,"concept_switch":this.concept_switch,"active_tab":this.active_tab}); 
         canvas.add(fig,this.canvasx*currentZoom,this.canvasy*currentZoom);
         this.displayJSON();
@@ -618,7 +631,7 @@ export default {
       if("svg" == document.elementFromPoint(event.clientX, event.clientY).tagName){
         var currentZoom = canvas.getZoom();
         this.dragname = event.srcElement.innerHTML.trim();
-        this.dragcolor = event.srcElement.style.backgroundColor;
+        //this.dragcolor = event.srcElement.style.backgroundColor;
         this.canvasx = event.clientX - this.offsetx - canvas.getAbsoluteX();
         this.canvasy = event.clientY - this.offsety - canvas.getAbsoluteY();
       }
@@ -958,8 +971,8 @@ export default {
 	    });
       canvas.on("select", async function(emitter,event){
         if(event["figure"] !== null){
-          if(event["selection"]["primary"]["cssClass"] === "CustomFigure" || event["selection"]["primary"]["cssClass"] === "MaterialFigure" || event["selection"]["primary"]["cssClass"] === "ToolFigure"){
-            event.figure.setStroke(6)
+          if(event["figure"]["cssClass"] === "CustomFigure" || event["figure"]["cssClass"] === "MaterialFigure" || event["figure"]["cssClass"] === "ToolFigure"){
+            event.figure.setStroke(2)
             if(event["figure"].userData != null){
               if(Object.keys(event["figure"].userData).length > 0){
                 self.select_nodeid.push(event["figure"].userData["nodeid"]);
@@ -982,6 +995,11 @@ export default {
         self.displayJSON();
       });
       canvas.on("unselect", function(emitter,event){
+        if(event["figure"] !== null){
+          if(event["figure"]["cssClass"] === "CustomFigure" || event["figure"]["cssClass"] === "MaterialFigure" || event["figure"]["cssClass"] === "ToolFigure"){
+            event.figure.setStroke(0)
+          }
+        }
         self.select_nodeid = [];
         self.select_boxid = [];
         self.deleteflag = false;

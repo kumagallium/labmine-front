@@ -14,7 +14,7 @@ var CustomFigure = draw2d.shape.basic.Rectangle.extend({
         input.on("disconnect",show,input);
         input.setRadius(2);
         input.setStroke(0);
-        output.setBackgroundColor("#4169e1");
+        input.setBackgroundColor("#4169e1");
 
         output.on("connect",show,output);
         output.on("disconnect",show,output);
@@ -25,7 +25,7 @@ var CustomFigure = draw2d.shape.basic.Rectangle.extend({
 
         this.alpha = 0.7;
         this.radius = 2;
-        this.stroke = 1;
+        this.stroke = 0;
         this.color = new draw2d.util.Color("#555");
         this.width = 100;
         this.height = 25;
@@ -50,6 +50,7 @@ var CustomFigure = draw2d.shape.basic.Rectangle.extend({
         this.children.each(function(i,e){
             var labelJSON = e.figure.getPersistentAttributes();
             labelJSON.locator=e.locator.NAME;
+            labelJSON.margin=e.locator.margin;
             memento.labels.push(labelJSON);
         });
 
@@ -62,7 +63,8 @@ var CustomFigure = draw2d.shape.basic.Rectangle.extend({
         $.each(memento.labels, $.proxy(function(i,json){
             var figure =  eval("new "+json.type+"()");
             figure.attr(json);
-            var locator =  eval("new "+json.locator+"()");
+            var margin =  eval(json.margin);
+            var locator =  eval("new "+json.locator+"({margin:"+margin+"})");
             this.add(figure, locator);
         },this));
     }

@@ -538,8 +538,8 @@
   scrollbar-width: none;       /* Firefox 対応 */
 }
 .details::-webkit-scrollbar {  /* Chrome, Safari 対応 */
-        display:none;
-    }
+  display:none;
+} 
 </style>
 
 <script>
