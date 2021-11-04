@@ -30,7 +30,7 @@
   "scales": [
     {
       "name": "x",
-      "type": "point",
+      "type": "linear",
       "round": true,
       "nice": true,
       "zero": true,
