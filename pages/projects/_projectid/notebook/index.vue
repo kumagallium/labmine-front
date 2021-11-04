@@ -333,14 +333,13 @@
                                       :ripple="false"
                                       flat
                                       outlined
-                                      :rounded="concept_switch == 2 ? '':'pill'"
                                       v-for="(proc, index)  of nodes[typeidx].contents.node_name"
                                       :key="proc"
                                       v-on:dragstart="startDrag"
                                       v-on:drag="doDrag"
                                       v-on:dragend="stopDrag"
                                       v-on:click="changeDetails(nodes[typeidx].contents.typeid,nodes[typeidx].contents.pk[index])"
-                                      :style="'background-color:'+nodes[typeidx].contents.color+';'"
+                                      style="background-color:#eee;"
                                       class="text-center ma-1 float-left node"
                                     >
                                       {{proc}}
@@ -684,6 +683,7 @@ export default {
      ...mapGetters({plan:'design/plan',selectedlist:'experiment/selectedlist',summarizeddata:'notebook/summarizeddata',data:'notebook/data',selectedproduct:'notebook/selectedproduct',products:'notebook/products',images:'notebook/images',plan_images:'notebook/plan_images',datalist:'notebook/datalist',defaults:'notebook/defaults',descriptions:'notebook/descriptions',sentences:'notebook/sentences',plan_descriptions:'notebook/plan_descriptions',plan_sentences:'notebook/plan_sentences',items:'notebook/items',headlines:'notebook/headlines',tags:'notebook/tags',selectedtags:'notebook/selectedtags',entity:'notebook/entity',notebooks:'notebook/notebooks',types:'design/types',nodes:'design/nodes',template:'design/template',templates:'design/templates',details:'design/details',emsg:'design/emsg',definitions:'definition/definitions'})
   },
   methods: {
+    // Right-side
     async selecttemplate(val){
       if(this.notebooks[Number(this.selectedrecipe.split("-")[1])] != undefined){
         this.flowid = this.notebooks[Number(this.selectedrecipe.split("-")[1])].fields.blueprint
@@ -1225,7 +1225,7 @@ export default {
       this.undoflag = event.getStack().canUndo();
       this.redoflag = event.getStack().canRedo();
   	},
-    startDrag:function() {
+    startDrag:function(event) {
       this.offsetx = event.offsetX;
       this.offsety = event.offsetY;
     },
@@ -1235,10 +1235,24 @@ export default {
         var nodeid = this.nodes[this.active_tab].contents.pk[this.nodes[this.active_tab].contents.node_name.indexOf(this.dragname)]
         if(this.dragname.length > 10) this.dragname = this.dragname.substr(0,10)+"...";
         var label = new draw2d.shape.basic.Label({text:this.dragname,stroke:0, fontColor:"#0d0d0d"});
-        if(this.concept_switch==0) var fig = new MaterialFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        else if(this.concept_switch==1) var fig = new ToolFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        else var fig = new CustomFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        fig.add(label, new draw2d.layout.locator.CenterLocator());
+        if(this.concept_switch==0){
+          var tagtext = "M"
+          var tagcolor = "#3949AB"
+          var fig = new MaterialFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        else if(this.concept_switch==1){
+          var tagtext = "T"
+          var tagcolor = "#00897B"
+          var fig = new ToolFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        else {
+          var tagtext = "A"
+          var tagcolor = "#E53935"
+          var fig = new CustomFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        var tag = new draw2d.shape.basic.Label({text:tagtext, stroke:0, bgColor :tagcolor, height:25, width:20, fontColor:"#fff", radius:2});
+        fig.add(label, new draw2d.layout.locator.RightLocator({margin:-80}));
+        fig.add(tag, new draw2d.layout.locator.RightLocator({margin:-100}));
         fig.attr('userData', {"nodeid":nodeid,"typeid":this.typeid,"concept_switch":this.concept_switch,"active_tab":this.active_tab}); 
         canvas.add(fig,this.canvasx*currentZoom,this.canvasy*currentZoom);
         this.displayJSON();
@@ -1246,11 +1260,13 @@ export default {
       }
 
     },
+
+    // Left-side
     doDrag:function(event) {
       if("svg" == document.elementFromPoint(event.clientX, event.clientY).tagName){
         var currentZoom = canvas.getZoom();
         this.dragname = event.srcElement.innerHTML.trim();
-        this.dragcolor = event.srcElement.style.backgroundColor;
+        //this.dragcolor = event.srcElement.style.backgroundColor;
         this.canvasx = event.clientX - this.offsetx - canvas.getAbsoluteX();
         this.canvasy = event.clientY - this.offsety - canvas.getAbsoluteY();
       }
@@ -1653,25 +1669,6 @@ export default {
 
     canvas = new BaseCanvas("canvas");
     reader = new draw2d.io.json.Reader();
-    /*
-    for(var i=0;i<17; i++) {
-      var label = new draw2d.shape.basic.Label({text:"I'm a Label2",stroke:0, fontColor:"#0d0d0d"});
-      var fig = new CustomFigure({bgColor:"#FFFDE7"});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-      fig.add(label, new draw2d.layout.locator.CenterLocator(this));
-      canvas.add(fig,50,50+(i*50));
-    }
-    for(var i=0;i<8; i++) {
-      var label = new draw2d.shape.basic.Label({text:"I'm a Label",stroke:0, fontColor:"#0d0d0d"});
-      var fig = new CustomFigure({bgColor:"#E8F5E9"});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-      fig.add(label, new draw2d.layout.locator.CenterLocator(this));
-      canvas.add(fig,175+(i*125),100);
-    }
-    try{
-      this.fitZoom();
-    }catch(e){
-      canvas.setZoom(1,true);
-    }
-    */
     reader.unmarshal(canvas, this.jsonDocument);
     this.displayJSON();
 
@@ -1698,7 +1695,7 @@ export default {
           else self.deletefigflag = 1
           if(event.selection.primary.outputPorts.data[0].userData["is_done"]) self.is_done = true
           else self.is_done = false
-          event.figure.setStroke(6)
+          event.figure.setStroke(2)
           if(event.figure.userData != null){
             if(Object.keys(event.figure.userData).length > 0){
               self.select_nodeid.push(event.figure.userData["nodeid"]);
@@ -1729,8 +1726,12 @@ export default {
       }
     });
     canvas.on("unselect", function(emitter,event){
-
-      if(self.select_boxid.length > 0) canvas.figures.data.filter(fig => fig["id"]==self.select_boxid[0])[0].setStroke(1)
+      if(event.figure !== null){
+        if(event.figure.cssClass === "CustomFigure" || event.figure.cssClass === "MaterialFigure" || event.figure["cssClass"] === "ToolFigure"){
+          event.figure.setStroke(0)
+        }
+      }
+      //if(self.select_boxid.length > 0) canvas.figures.data.filter(fig => fig["id"]==self.select_boxid[0])[0].setStroke(1)
       self.select_nodeid = [];
       self.select_boxid = [];
       self.deletefigflag = 0;
