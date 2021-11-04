@@ -94,7 +94,7 @@
       <v-card>
         <!-- Errorbar -->
         <v-row v-if="error!=''">
-          <v-col md="12" class="pa-0">     
+          <v-col md="12" class="px-0 pb-0">     
             <v-alert
               dense
                class="my-0"

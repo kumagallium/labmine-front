@@ -114,7 +114,7 @@
         </v-card>
       </v-col>
       <!-- GraphFields -->
-      <v-col :md="maximize ? 6 : 12" id="figparent" class="">
+      <v-col :md="maximize ? 6 : 12" id="figparent" class="pb-5">
         <div :id="'figure'+dialog+idx+'_'+cluster" v-on:change="console.log('figurechange')" style="width:100%;">a</div>
       </v-col>
     </v-row>

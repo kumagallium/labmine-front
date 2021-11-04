@@ -66,7 +66,7 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col>
+                    <v-col class="mt-3">
                       <v-expansion-panels
                         accordion
                         flat
