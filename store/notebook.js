@@ -120,7 +120,10 @@ export const mutations = {
   },
   clearEntity(state) {
     state.entity = []
-  }
+  },
+  removeNotebookList(state, {idx}){
+    state.notebooks.splice(idx, 1)
+  },
 }
 
 export const actions = {

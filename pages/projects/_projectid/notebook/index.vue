@@ -1006,6 +1006,7 @@ export default {
     },
     closeRecipe:function(){
       this.recipes.splice(Number(this.selectedrecipe.split('-')[1]), 1)
+      this.$store.commit('notebook/removeNotebookList', {idx:Number(this.selectedrecipe.split('-')[1])})
       this.$store.commit('experiment/removeList', {idx:Number(this.selectedrecipe.split('-')[1])})
       this.changedrecipe(this.selectedrecipe)
     },
