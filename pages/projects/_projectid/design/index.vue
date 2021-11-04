@@ -177,7 +177,6 @@
                                   <v-card
                                     :ripple="false"
                                     flat
-                                    :rounded="concept_switch == 2 ? '':'pill'"
                                     outlined
                                     v-for="(proc, index)  of nodes[typeidx].contents.node_name"
                                     :key="proc"
@@ -185,7 +184,7 @@
                                     v-on:drag="doDrag"
                                     v-on:dragend="stopDrag"
                                     v-on:click="changeDetails(nodes[typeidx].contents.typeid,nodes[typeidx].contents.pk[index])"
-                                    :style="'background-color:'+nodes[typeidx].contents.color+';'"
+                                    style="background-color:#eee;"
                                     class="text-center ma-1 float-left node"
                                   >
                                     {{proc}}
@@ -429,6 +428,7 @@ export default {
      ...mapGetters({defaults:'notebook/defaults',items:'notebook/items', types:'design/types',nodes:'design/nodes',template:'design/template',templates:'design/templates',details:'design/details',emsg:'design/emsg',definitions:'definition/definitions'})
   },
   methods: {
+    // Right-side
     async selecttemplate(val){
       this.flowname = val.flowname
       this.flowid = val.pk
@@ -594,7 +594,7 @@ export default {
       this.undoflag = event.getStack().canUndo();
       this.redoflag = event.getStack().canRedo();
   	},
-    startDrag:function() {
+    startDrag:function(event) {
       this.offsetx = event.offsetX;
       this.offsety = event.offsetY;
     },
@@ -602,23 +602,39 @@ export default {
       if("svg" == document.elementFromPoint(event.clientX, event.clientY).tagName){
         var currentZoom = canvas.getZoom();
         var nodeid = this.nodes[this.active_tab].contents.pk[this.nodes[this.active_tab].contents.node_name.indexOf(this.dragname)]
-        if(this.dragname.length > 10) this.dragname = this.dragname.substr(0,10)+"...";
+        if(this.dragname.length > 5) this.dragname = this.dragname.substr(0,5)+"...";
         var label = new draw2d.shape.basic.Label({text:this.dragname,stroke:0, fontColor:"#0d0d0d"});
-        if(this.concept_switch==0) var fig = new MaterialFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        else if(this.concept_switch==1) var fig = new ToolFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        else var fig = new CustomFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        fig.add(label, new draw2d.layout.locator.CenterLocator());
+        if(this.concept_switch==0){
+          var tagtext = "M"
+          var tagcolor = "#3949AB"
+          var fig = new MaterialFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        else if(this.concept_switch==1){
+          var tagtext = "T"
+          var tagcolor = "#00897B"
+          var fig = new ToolFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        else {
+          var tagtext = "A"
+          var tagcolor = "#E53935"
+          var fig = new CustomFigure({bgColor:this.dragcolor});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
+        }
+        var tag = new draw2d.shape.basic.Label({text:tagtext, stroke:0, bgColor :tagcolor, height:25, width:20, fontColor:"#fff", radius:2});
+        fig.add(label, new draw2d.layout.locator.RightLocator({margin:-80}));
+        fig.add(tag, new draw2d.layout.locator.RightLocator({margin:-100}));
         fig.attr('userData', {"nodeid":nodeid,"typeid":this.typeid,"concept_switch":this.concept_switch,"active_tab":this.active_tab}); 
         canvas.add(fig,this.canvasx*currentZoom,this.canvasy*currentZoom);
         this.displayJSON();
       }
 
     },
+
+    // Left-side
     doDrag:function(event) {
       if("svg" == document.elementFromPoint(event.clientX, event.clientY).tagName){
         var currentZoom = canvas.getZoom();
         this.dragname = event.srcElement.innerHTML.trim();
-        this.dragcolor = event.srcElement.style.backgroundColor;
+        //this.dragcolor = event.srcElement.style.backgroundColor;
         this.canvasx = event.clientX - this.offsetx - canvas.getAbsoluteX();
         this.canvasy = event.clientY - this.offsety - canvas.getAbsoluteY();
       }
@@ -914,79 +930,64 @@ export default {
     },
     ...mapActions('design', ['publishType','publishTemplate','editType','editDetails','editBlueprint','getBlueprint','removeFigure','removeType','removeDetail','removeEntity','fetchDetails','publishDetail','publishProperty']),
     ...mapActions('notebook', ['removeDefaults','publishItems','fetchDefaults','fetchItems'])
-
-},
+  },
   mounted: function(){
     if(this.types !== null && this.types.length > 0){
       this.typename = this.types[0].contents.fields.type_name
       this.typeid = this.types[0].contents.pk
       this.newDetails()
     }
-      this.handleResize();
-      $(window).on('load resize', this.handleResize);
+    this.handleResize();
+    $(window).on('load resize', this.handleResize);
 
-      canvas = new BaseCanvas("canvas");
-      reader = new draw2d.io.json.Reader();
-      /*
-      for(var i=0;i<17; i++) {
-        var label = new draw2d.shape.basic.Label({text:"I'm a Label2",stroke:0, fontColor:"#0d0d0d"});
-        var fig = new CustomFigure({bgColor:"#FFFDE7"});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        fig.add(label, new draw2d.layout.locator.CenterLocator(this));
-        canvas.add(fig,50,50+(i*50));
-      }
-      for(var i=0;i<8; i++) {
-        var label = new draw2d.shape.basic.Label({text:"I'm a Label",stroke:0, fontColor:"#0d0d0d"});
-        var fig = new CustomFigure({bgColor:"#E8F5E9"});//draw2d.shape.basic.Rectangle({width:100, height:25});//new reader.createFigureFromType("CustomFigure");//CustomFigure();//draw2d.shape.basic.Rectangle({width:100, height:25});
-        fig.add(label, new draw2d.layout.locator.CenterLocator(this));
-        canvas.add(fig,175+(i*125),100);
-      }
-      try{
-        this.fitZoom();
-      }catch(e){
-        canvas.setZoom(1,true);
-      }
-      */
-      reader.unmarshal(canvas, this.jsonDocument);
-      this.displayJSON();
+    canvas = new BaseCanvas("canvas");
+    reader = new draw2d.io.json.Reader();
+    reader.unmarshal(canvas, this.jsonDocument);
+    this.displayJSON();
 
-      var self = this;
-      canvas.getCommandStack().addEventListener(function(e){
-	      if(e.isPostChangeEvent()){
-          self.displayJSON();
-          self.stackChanged(e);
-	      }
-	    });
-      canvas.on("select", async function(emitter,event){
-        if(event["figure"] !== null){
-          if(event["selection"]["primary"]["cssClass"] === "CustomFigure" || event["selection"]["primary"]["cssClass"] === "MaterialFigure" || event["selection"]["primary"]["cssClass"] === "ToolFigure"){
-            event.figure.setStroke(6)
-            if(event["figure"].userData != null){
-              if(Object.keys(event["figure"].userData).length > 0){
-                self.select_nodeid.push(event["figure"].userData["nodeid"]);
-                self.select_boxid.push(event["figure"].id);
+    var self = this;
+    canvas.getCommandStack().addEventListener(function(e){
+      if(e.isPostChangeEvent()){
+        self.displayJSON();
+        self.stackChanged(e);
+      }
+    });
+    canvas.on("select", async function(emitter,event){
+      if(event.figure !== null){
+        if(event.figure.cssClass === "CustomFigure" || event.figure.cssClass === "MaterialFigure" || event.figure.cssClass === "ToolFigure"){
+          event.figure.setStroke(2)
+          if(event.figure.userData != null){
+            if(Object.keys(event.figure.userData).length > 0){
+              self.select_nodeid.push(event.figure.userData["nodeid"]);
+              self.select_boxid.push(event.figure.id);
 
-                self.typeid =  event["figure"].userData["typeid"]
-                //self.changeDetails(Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].contents.typeid),self.select_nodeid[0])
-                await self.changeDetails(self.typeid,self.select_nodeid[0])
-                self.switch_prop = 0
-                if(self.concept_switch != event["figure"].userData["concept_switch"]){
-                  self.concept_switch =  event["figure"].userData["concept_switch"]
-                  await self.changeConcept()
-                }
-                self.active_tab =  event["figure"].userData["active_tab"]//Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].id)
+              self.typeid =  event.figure.userData["typeid"]
+              //self.changeDetails(Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].contents.typeid),self.select_nodeid[0])
+              await self.changeDetails(self.typeid,self.select_nodeid[0])
+              self.switch_prop = 0
+              if(self.concept_switch != event.figure.userData["concept_switch"]){
+                self.concept_switch =  event.figure.userData["concept_switch"]
+                await self.changeConcept()
               }
+              self.active_tab =  event.figure.userData["active_tab"]//Number(self.nodes.filter(proc => proc.contents.pk.indexOf(self.select_nodeid[0])>-1)[0].id)
             }
           }
         }
-        self.deleteflag = true;
-        self.displayJSON();
-      });
-      canvas.on("unselect", function(emitter,event){
-        self.select_nodeid = [];
-        self.select_boxid = [];
-        self.deleteflag = false;
-        self.displayJSON();
-      });
+      }
+      self.deleteflag = true;
+      self.displayJSON();
+    });
+    canvas.on("unselect", function(emitter,event){
+      if(event.figure !== null){
+        if(event.figure.cssClass === "CustomFigure" || event.figure.cssClass === "MaterialFigure" || event.figure["cssClass"] === "ToolFigure"){
+          event.figure.setStroke(0)
+        }
+      }
+      self.select_nodeid = [];
+      self.select_boxid = [];
+      self.deleteflag = false;
+      self.displayJSON();
+    });
   }
 }
 
