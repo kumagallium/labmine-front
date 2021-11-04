@@ -97,6 +97,7 @@
                 <v-card flat>
                   <v-pagination
                     v-model="page"
+                    total-visible=10
                     :length="Math.ceil(count/this.itemsPerPage)"
                     @input="changePage"
                   ></v-pagination>
