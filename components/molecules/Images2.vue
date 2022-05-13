@@ -2,7 +2,7 @@
   <v-hover>
     <template v-slot:default="{ hover }">
       <v-card flat color="rgba(255, 255, 255, 0)">
-        <img style="max-width:100%;max-height:100%;width:100%;height:100%;" :src="absolutePath+'/api/media/'+image.image">
+        <img style="max-width:100%;max-height:100%;width:100%;height:100%;" :src="absolutePath+':8001/api/media/'+image.image">
         <v-fade-transition>
             <v-overlay
               v-if="hover"
