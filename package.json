@@ -23,7 +23,7 @@
     "nuxt": "^2.0.0",
     "tabulator-tables": "4.7.1",
     "universal-cookie": "4.0.2",
-    "vega": "5.9.0",
+    "vega": "6.2.0",
     "vue-cropperjs": "^4.2.0",
     "nuxt-env": "^0.1.0",
     "vuedraggable": "2.23.2"
