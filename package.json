@@ -20,7 +20,7 @@
     "jquery-ui": "1.12.1",
     "jquery.browser": "0.1.0",
     "moment": "^2.22.2",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.18.1",
     "tabulator-tables": "4.7.1",
     "universal-cookie": "4.0.2",
     "vega": "5.9.0",
